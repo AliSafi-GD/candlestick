@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -21,10 +25,10 @@ class SignUp extends StatelessWidget {
           Wrap(
             runSpacing: 10.0,
             children: [
-              InputField(5.0, "User Name", Icons.account_circle),
-              InputField(5.0, "Password", Icons.lock, secure: true),
-              InputField(5.0, "Confirm Password", Icons.lock, secure: true),
-              InputField(5.0, "Mail", Icons.mail,
+              InputField(5.0, "username", Icons.account_circle),
+              InputField(5.0, "password", Icons.lock, secure: true),
+              InputField(5.0, "confirm password", Icons.lock, secure: true),
+              InputField(5.0, "email", Icons.mail,
                   inputType: TextInputType.emailAddress)
             ],
           ),
@@ -36,9 +40,16 @@ class SignUp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: FlatButton(
-                onPressed: (){
+                onPressed: () async {
+                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                  var js = jsonEncode(data);
+                    print(js);
 
-                    print(data);
+                    var url = 'http://10.0.2.2:5000/signup';
+                    var response = await http.post(url,headers: {"Content-type": "application/json"}, body: js);
+                    print('Response status: ${response.statusCode}');
+                    print('Response body: ${response.body}');
+                    //print(response.bodyBytes);
 
                 },
                 child: Text(
